@@ -1,0 +1,9 @@
+node_modules
+.test-dist
+dist
+.git
+.github
+npm-debug.log*
+ledgerwake.json
+.env*
+coverage

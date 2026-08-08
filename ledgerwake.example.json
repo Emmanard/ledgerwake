@@ -1,0 +1,31 @@
+{
+  "rpcUrl": "https://soroban-testnet.stellar.org",
+  "network": "testnet",
+  "databaseUrl": "postgres://ledgerwake:ledgerwake@localhost:5432/ledgerwake",
+  "admin": {
+    "host": "127.0.0.1",
+    "port": 8787
+  },
+  "poll": {
+    "intervalMs": 5000,
+    "pageSize": 100
+  },
+  "delivery": {
+    "concurrency": 4,
+    "timeoutMs": 10000,
+    "maxAttempts": 10,
+    "allowPrivateDestinations": false
+  },
+  "subscription": {
+    "name": "example-contract-events",
+    "startLedger": "latest",
+    "filters": [
+      {
+        "type": "contract",
+        "contractIds": ["REPLACE_WITH_CONTRACT_ID"]
+      }
+    ],
+    "webhookUrl": "https://example.com/webhooks/stellar",
+    "webhookSecretEnv": "LEDGERWAKE_WEBHOOK_SECRET"
+  }
+}

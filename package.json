@@ -1,0 +1,36 @@
+{
+  "name": "ledgerwake",
+  "version": "0.1.0-alpha.1",
+  "description": "Reliable event delivery for Stellar applications.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=24.18.0 <25"
+  },
+  "bin": {
+    "wake": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test": "npm run build:test && node --test .test-dist/test/*.test.js",
+    "start": "node dist/cli.js serve",
+    "dev": "node --experimental-strip-types src/cli.ts serve",
+    "audit": "npm audit --audit-level=high",
+    "verify": "npm run check && npm test && npm run build"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "16.2.0",
+    "ajv": "8.20.0",
+    "fastify": "5.11.3",
+    "pg": "8.23.0",
+    "prom-client": "15.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "@types/pg": "8.21.0",
+    "typescript": "7.0.2"
+  },
+  "license": "Apache-2.0"
+}

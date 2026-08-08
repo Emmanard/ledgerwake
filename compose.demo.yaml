@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:18.3-alpine
+    environment:
+      POSTGRES_DB: ledgerwake
+      POSTGRES_USER: ledgerwake
+      POSTGRES_PASSWORD: ledgerwake-local-only
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ledgerwake -d ledgerwake"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  ledgerwake:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      LEDGERWAKE_WEBHOOK_SECRET: ${LEDGERWAKE_WEBHOOK_SECRET:?set a secret of at least 32 characters}
+    volumes:
+      - ./ledgerwake.json:/config/ledgerwake.json:ro
+    ports:
+      - "8787:8787"

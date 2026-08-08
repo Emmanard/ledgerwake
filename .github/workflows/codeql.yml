@@ -1,0 +1,19 @@
+name: CodeQL
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 3 * * 2"
+permissions:
+  contents: read
+  security-events: write
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: github/codeql-action/init@b374143c1149a9118a5efb5e8a2869f06f28a1d6 # v3.28.10
+        with:
+          languages: javascript-typescript
+      - uses: github/codeql-action/analyze@b374143c1149a9118a5efb5e8a2869f06f28a1d6 # v3.28.10

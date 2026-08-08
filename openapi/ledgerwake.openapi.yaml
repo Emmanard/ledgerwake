@@ -1,0 +1,51 @@
+openapi: 3.1.0
+info:
+  title: Ledgerwake Administration API
+  version: 0.1.0-alpha.1
+  description: Local-first operational API for the Ledgerwake alpha.
+servers:
+  - url: http://127.0.0.1:8787
+paths:
+  /healthz:
+    get:
+      responses:
+        "200": { description: Process is alive }
+  /readyz:
+    get:
+      responses:
+        "200": { description: Database is reachable }
+        "503": { description: Runtime is not ready }
+  /metrics:
+    get:
+      responses:
+        "200": { description: Prometheus metrics }
+  /v1/status:
+    get:
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200": { description: Subscription and delivery state }
+  /v1/deliveries:
+    get:
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 500, default: 100 }
+      responses:
+        "200": { description: Recent deliveries }
+  /v1/deliveries/{id}/replay:
+    post:
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Delivery scheduled for replay }
+        "409": { description: Delivery is not replayable }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
