@@ -15,7 +15,7 @@ Ledgerwake is an open-source, self-hosted reliable event delivery runtime for St
 
 Replace these placeholders before applying:
 
-- Public repository: `[URL]`
+- Public repository: `https://github.com/Emmanard/ledgerwake`
 - Tagged alpha: `[URL]`
 - Testnet demonstration: `[URL / contract ID]`
 - CI run: `[URL]`
