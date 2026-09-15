@@ -11,9 +11,11 @@
 - [x] Enable Dependabot security updates and private vulnerability reporting.
 - [x] Add the repository to OpenSSF Scorecard and pin the workflow by commit SHA.
       (workflow added and pinned; first run pending Actions being re-enabled)
-- [ ] Run `npm ci && npm run verify` from a fresh clone.
-- [ ] Run the PostgreSQL integration test with `TEST_DATABASE_URL` configured.
-- [ ] Build and smoke-test the container image as the non-root user.
+- [x] Run `npm ci && npm run verify` from a fresh clone. (also ran `npm audit`,
+      found and fixed 4 high-severity fast-uri advisories, re-verified clean)
+- [x] Run the PostgreSQL integration test with `TEST_DATABASE_URL` configured.
+- [x] Build and smoke-test the container image as the non-root user. (confirmed
+      UID 10001, `config validate` redacts secrets correctly)
 - [ ] Record a short terminal demo: migrate, doctor, serve, receive signed event,
       inspect delivery, and replay it.
 - [x] Open one roadmap issue and one `good first issue` to demonstrate stewardship.
