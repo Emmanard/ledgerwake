@@ -25,7 +25,7 @@ jobs:
       TEST_DATABASE_URL: postgres://ledgerwake:test-only@127.0.0.1:5432/ledgerwake
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@1e60f620b9541d8ab1ee00c4eaddb8c6acb745a # v4.0.4
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.18.0
           cache: npm
