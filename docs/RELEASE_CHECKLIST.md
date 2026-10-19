@@ -6,11 +6,11 @@
       alpha, testnet demo, CI run, threat model, continuous-run, and design-partner links
       still genuinely pending — see docs/DRIPS_APPLICATION.md)
 - [x] Create the public repository and enable branch protection.
-- [ ] Require CI and CodeQL checks for pull requests. (checks exist and run; not yet set as
-      a required merge gate — pending a real CI pass once Actions billing is resolved)
+- [x] Require CI and CodeQL checks for pull requests. (Actions billing resolved
+      2026-10-19; both checks pass and are now required status checks on `main`)
 - [x] Enable Dependabot security updates and private vulnerability reporting.
 - [x] Add the repository to OpenSSF Scorecard and pin the workflow by commit SHA.
-      (workflow added and pinned; first run pending Actions being re-enabled)
+      (first real run completed successfully 2026-10-19)
 - [x] Run `npm ci && npm run verify` from a fresh clone. (also ran `npm audit`,
       found and fixed 4 high-severity fast-uri advisories, re-verified clean)
 - [x] Run the PostgreSQL integration test with `TEST_DATABASE_URL` configured.
