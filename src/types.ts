@@ -15,6 +15,7 @@ export interface AppConfig {
   rpcUrl: string;
   network: "testnet" | "public";
   databaseUrl: string;
+  databaseUrlEnv?: string;
   admin: { host: string; port: number; tokenEnv?: string };
   poll: { intervalMs: number; pageSize: number };
   delivery: {

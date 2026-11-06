@@ -5,11 +5,12 @@ import type { AppConfig } from "./types.js";
 const schema = {
   type: "object",
   additionalProperties: false,
-  required: ["rpcUrl", "network", "databaseUrl", "admin", "poll", "delivery", "subscription"],
+  required: ["rpcUrl", "network", "admin", "poll", "delivery", "subscription"],
   properties: {
     rpcUrl: { type: "string", minLength: 1 },
     network: { enum: ["testnet", "public"] },
     databaseUrl: { type: "string", minLength: 1 },
+    databaseUrlEnv: { type: "string", pattern: "^[A-Z][A-Z0-9_]+$" },
     admin: {
       type: "object",
       additionalProperties: false,
@@ -91,7 +92,17 @@ export async function loadConfig(path: string): Promise<AppConfig> {
     throw new Error(`Invalid configuration: ${details}`);
   }
 
-  const config = raw as AppConfig;
+  const parsed = raw as Omit<AppConfig, "databaseUrl"> & { databaseUrl?: string };
+
+  let databaseUrl = parsed.databaseUrl;
+  if (parsed.databaseUrlEnv) {
+    const fromEnv = process.env[parsed.databaseUrlEnv];
+    if (!fromEnv) throw new Error(`Environment variable ${parsed.databaseUrlEnv} is not set`);
+    databaseUrl = fromEnv;
+  }
+  if (!databaseUrl) throw new Error("Configuration must set databaseUrl or databaseUrlEnv");
+
+  const config: AppConfig = { ...parsed, databaseUrl };
   const rpc = new URL(config.rpcUrl);
   const webhook = new URL(config.subscription.webhookUrl);
   const localRpc = ["localhost", "127.0.0.1", "[::1]"].includes(rpc.hostname);
