@@ -75,3 +75,37 @@ export async function serve(config: AppConfig): Promise<void> {
   process.once("SIGTERM", () => void shutdown("SIGTERM").then(() => process.exit(0)));
   process.once("SIGINT", () => void shutdown("SIGINT").then(() => process.exit(0)));
 }
+
+/**
+ * Single-pass equivalent of serve(): no admin server, no intervals. Polls once,
+ * drains the delivery queue, then returns. Meant for a scheduler that provides
+ * its own cadence (e.g. a CI cron job) instead of a long-lived process.
+ */
+export async function runOnce(config: AppConfig): Promise<void> {
+  const db = new Database(config.databaseUrl);
+  const metrics = new Metrics();
+  const rpc = new StellarRpcClient(config.rpcUrl);
+  await db.migrate();
+  const passphrase = await rpc.getNetworkPassphrase();
+  if (passphrase !== NETWORK_PASSPHRASES[config.network]) {
+    await db.close();
+    throw new Error(`RPC network passphrase does not match configured ${config.network} network`);
+  }
+  await assertSafeDestination(config.subscription.webhookUrl, config.delivery.allowPrivateDestinations);
+  const secret = process.env[config.subscription.webhookSecretEnv];
+  if (!secret || secret.length < 32) {
+    await db.close();
+    throw new Error(`${config.subscription.webhookSecretEnv} must contain at least 32 characters`);
+  }
+  const latest = await rpc.getLatestLedger();
+  const subscriptionId = await db.configure(config, passphrase, latest);
+  const ingestor = new Ingestor(config, db, rpc, metrics, subscriptionId, passphrase);
+  const delivery = new DeliveryWorker(config, db, metrics);
+  await db.recoverStaleDeliveries();
+
+  await ingestor.pollOnce();
+  await delivery.drain(60_000);
+
+  log("info", "app", "Ledgerwake run-once pass complete", { network: config.network, subscriptionId });
+  await db.close();
+}

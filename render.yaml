@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: ledgerwake
+    runtime: node
+    plan: free
+    buildCommand: npm ci --ignore-scripts && npm run build
+    startCommand: node dist/cli.js serve --config ledgerwake.render.json
+    healthCheckPath: /healthz
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: LEDGERWAKE_DATABASE_URL
+        sync: false
+      - key: LEDGERWAKE_WEBHOOK_SECRET
+        sync: false
+      - key: LEDGERWAKE_ADMIN_TOKEN
+        generateValue: true

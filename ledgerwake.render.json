@@ -1,0 +1,32 @@
+{
+  "rpcUrl": "https://soroban-testnet.stellar.org",
+  "network": "testnet",
+  "databaseUrlEnv": "LEDGERWAKE_DATABASE_URL",
+  "admin": {
+    "host": "0.0.0.0",
+    "port": 10000,
+    "tokenEnv": "LEDGERWAKE_ADMIN_TOKEN"
+  },
+  "poll": {
+    "intervalMs": 5000,
+    "pageSize": 100
+  },
+  "delivery": {
+    "concurrency": 4,
+    "timeoutMs": 10000,
+    "maxAttempts": 10,
+    "allowPrivateDestinations": false
+  },
+  "subscription": {
+    "name": "example-contract-events",
+    "startLedger": "latest",
+    "filters": [
+      {
+        "type": "contract",
+        "contractIds": ["CC3JDHPWM2EV52HLGNSRI5YVXSVWBR3F2XU4NCJMZ7ZEEM5RR5C3A3GU"]
+      }
+    ],
+    "webhookUrl": "REPLACE_WITH_REAL_WEBHOOK_URL",
+    "webhookSecretEnv": "LEDGERWAKE_WEBHOOK_SECRET"
+  }
+}

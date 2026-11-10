@@ -22,6 +22,16 @@ export class DeliveryWorker {
     }
   }
 
+  /** Runs tick() repeatedly until the claimable queue and all in-flight deliveries are empty, or deadlineMs elapses. For one-shot invocations (e.g. a CI scheduler) that exit as soon as this resolves. */
+  async drain(deadlineMs: number): Promise<void> {
+    const deadline = Date.now() + deadlineMs;
+    while (Date.now() < deadline) {
+      await this.tick();
+      if (this.active === 0) return;
+      await new Promise((resolve) => setTimeout(resolve, 150));
+    }
+  }
+
   private async deliver(delivery: ClaimedDelivery): Promise<void> {
     const startedAt = new Date();
     const timer = this.metrics.deliveryLatency.startTimer();

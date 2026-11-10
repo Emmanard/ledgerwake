@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { parseArgs } from "node:util";
-import { doctor, serve } from "./app.js";
+import { doctor, runOnce, serve } from "./app.js";
 import { loadConfig, redactConfig } from "./config.js";
 import { Database } from "./db.js";
 
@@ -41,6 +41,8 @@ try {
     if (Object.values(result).some((value) => ["mismatch", "missing_or_short"].includes(String(value)))) process.exitCode = 1;
   } else if (command === "serve") {
     await serve(config);
+  } else if (command === "run-once") {
+    await runOnce(config);
   } else if (command === "status") {
     const db = new Database(config.databaseUrl);
     try { print(await db.status(), values.output!); } finally { await db.close(); }
@@ -74,6 +76,7 @@ Commands:
   db migrate            Apply PostgreSQL migrations
   doctor                Check database, RPC network, destination, and secret
   serve                 Start ingestion, delivery workers, and admin API
+  run-once              Poll once, drain pending deliveries, then exit (for schedulers)
   status                Show subscription and delivery state
   delivery list         List recent deliveries
   delivery replay <id>  Replay a dead or delivered webhook
