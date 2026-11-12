@@ -26,7 +26,7 @@
         "contractIds": ["CC3JDHPWM2EV52HLGNSRI5YVXSVWBR3F2XU4NCJMZ7ZEEM5RR5C3A3GU"]
       }
     ],
-    "webhookUrl": "REPLACE_WITH_REAL_WEBHOOK_URL",
+    "webhookUrl": "https://httpbin.org/post",
     "webhookSecretEnv": "LEDGERWAKE_WEBHOOK_SECRET"
   }
 }
