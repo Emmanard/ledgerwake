@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - run: curl --fail --max-time 20 https://ledgerwake.onrender.com/healthz
+      - run: curl --fail --max-time 75 https://ledgerwake.onrender.com/healthz
